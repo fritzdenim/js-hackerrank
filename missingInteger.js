@@ -12,28 +12,24 @@ const assert = require('assert');
 
 
 function solution(A) {
-    const distinct = (value,index,self)=> {
-        return self.indexOf(value)===index;
+    A.sort((a,b)=>a-b);
+    const maxNum = Math.max(...A);
+
+    let numbers = Array(...Array(maxNum+1).keys());
+    numbers.shift();
+
+    const missingNumbers = numbers.filter(n=>!A.includes(n) && n>0);
+
+    let missingNumber = 0;
+    if (missingNumbers.length>=1) {
+        missingNumber = missingNumbers[0];
+    } else if (numbers.length>=1 && missingNumbers.length===0) {
+        missingNumber = maxNum + 1;
+    } else {
+        missingNumber = 1;
     }
 
-    let distinctA = A.filter(distinct);    
-    distinctA.sort((a,b)=>a-b);
-
-    const getFirstMissingNumber = () => {
-        let missingNumber = 1;
-        const maxNum = Math.max(...distinctA);
-        for (let i=maxNum; i>1; i--) {
-            if (!distinctA.includes(i)) {
-                missingNumber = i;
-            }
-        }
-        return (missingNumber > 1) ? missingNumber : maxNum + 1;
-    };
-
-    let missingNumber = getFirstMissingNumber();
-    missingNumber = !missingNumber ? 1 : missingNumber;
-
-    console.log("num",distinctA,missingNumber);
+    console.log("num",numbers,missingNumbers,maxNum,missingNumber);
     return missingNumber;
 }
 
@@ -48,4 +44,3 @@ assert.equal(sol,number,`should equal to ${number} got ${sol}`);
 sol = solution([-1,-3]);
 number = 1;
 assert.equal(sol,number,`should equal to ${number} got ${sol}`);
-
